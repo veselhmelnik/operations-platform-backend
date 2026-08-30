@@ -1,0 +1,45 @@
+import { OrganizationRole } from 'src/generated/prisma/enums';
+import { Permission } from './require-permission.decorator';
+
+export const ROLE_PERMISSIONS: Record<OrganizationRole, Permission[]> = {
+  OWNER: [
+    'organization.delete',
+    'member.add',
+    'member.remove',
+    'member.role.update',
+    'project.create',
+    'project.read',
+    'task.create',
+    'task.update',
+    'task.read',
+    'comment.create',
+    'task.delete',
+  ],
+
+  ADMIN: [
+    'member.add',
+    'member.remove',
+    'member.role.update',
+    'project.create',
+    'project.read',
+    'task.create',
+    'task.update',
+    'task.read',
+    'comment.create',
+    'task.delete',
+  ],
+
+  MANAGER: [
+    'project.create',
+    'project.read',
+    'task.create',
+    'task.update',
+    'task.read',
+    'comment.create',
+    'task.delete',
+  ],
+
+  MEMBER: ['project.read', 'task.update', 'task.read', 'comment.create'],
+
+  VIEWER: ['project.read', 'task.read'],
+};
