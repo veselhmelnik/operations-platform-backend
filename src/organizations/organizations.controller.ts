@@ -5,6 +5,7 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { OrganizationsService } from './organizations.service';
@@ -15,6 +16,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { PermissionGuard } from 'src/authorization/permission.guard';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { ProjectsService } from 'src/projects/projects.service';
+import { Request } from 'express';
 
 @UseGuards(AuthGuard, PermissionGuard)
 @Controller('organizations')
@@ -24,9 +26,14 @@ export class OrganizationsController {
     private readonly projectService: ProjectsService,
   ) {}
 
+  // @Get()
+  // findAll() {
+  //   return this.organizationsService.getAllOrganizations();
+  // }
+
   @Get()
-  findAll() {
-    return this.organizationsService.getAllOrganizations();
+  getAll(@Req() request: Request) {
+    return this.organizationsService.getUserOrganizations(request['user'].id);
   }
 
   @Get(':organizationId')
@@ -37,8 +44,11 @@ export class OrganizationsController {
   }
 
   @Post()
-  create(@Body() dto: CreateOrganizationDto) {
-    return this.organizationsService.createOneOrganization(dto);
+  create(@Req() request: Request, @Body() dto: CreateOrganizationDto) {
+    return this.organizationsService.createOneOrganization(
+      request['user'].id,
+      dto,
+    );
   }
 
   @RequirePermission('member.add')

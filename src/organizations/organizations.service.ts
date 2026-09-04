@@ -33,6 +33,18 @@ export class OrganizationsService {
     });
   }
 
+  async getUserOrganizations(userId: string) {
+    return this.prisma.organization.findMany({
+      where: {
+        members: {
+          some: {
+            userId,
+          },
+        },
+      },
+    });
+  }
+
   async getSingleOrganization(id: string) {
     const organization = await this.prisma.organization.findUnique({
       where: {
@@ -61,7 +73,7 @@ export class OrganizationsService {
     return organization;
   }
 
-  async createOneOrganization(dto: CreateOrganizationDto) {
+  async createOneOrganization(ownerId, dto: CreateOrganizationDto) {
     return this.prisma.$transaction(async (tx) => {
       const organization = await tx.organization.create({
         data: {
@@ -70,7 +82,7 @@ export class OrganizationsService {
       });
       await tx.organizationMember.create({
         data: {
-          userId: dto.ownerId,
+          userId: ownerId,
           organizationId: organization.id,
           role: 'OWNER',
         },

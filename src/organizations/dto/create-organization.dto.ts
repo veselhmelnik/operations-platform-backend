@@ -7,8 +7,4 @@ export class CreateOrganizationDto {
   @MaxLength(50)
   @ApiProperty()
   name!: string;
-
-  @IsUUID()
-  @ApiProperty()
-  ownerId!: string;
 }
