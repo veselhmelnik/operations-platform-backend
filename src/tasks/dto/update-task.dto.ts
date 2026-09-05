@@ -20,16 +20,24 @@ export class UpdateTaskDto {
   @IsOptional()
   @IsString()
   @MaxLength(2000)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    type: String,
+    nullable: true,
+  })
   description?: string | null;
 
   @IsOptional()
   @IsEnum(TaskStatus)
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    enum: TaskStatus,
+  })
   status?: TaskStatus;
 
   @IsOptional()
   @IsUUID()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({
+    type: String,
+    nullable: true,
+  })
   assigneeId?: string | null;
 }

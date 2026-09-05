@@ -3,6 +3,7 @@ import { SetMetadata } from '@nestjs/common';
 export const REQUIRE_PERMISSION_KEY = 'requirePermission';
 export type Permission =
   | 'organization.delete'
+  | 'member.read'
   | 'member.add'
   | 'member.remove'
   | 'member.role.update'

@@ -4,6 +4,7 @@ import { Permission } from './require-permission.decorator';
 export const ROLE_PERMISSIONS: Record<OrganizationRole, Permission[]> = {
   OWNER: [
     'organization.delete',
+    'member.read',
     'member.add',
     'member.remove',
     'member.role.update',
@@ -17,6 +18,7 @@ export const ROLE_PERMISSIONS: Record<OrganizationRole, Permission[]> = {
   ],
 
   ADMIN: [
+    'member.read',
     'member.add',
     'member.remove',
     'member.role.update',
@@ -30,6 +32,7 @@ export const ROLE_PERMISSIONS: Record<OrganizationRole, Permission[]> = {
   ],
 
   MANAGER: [
+    'member.read',
     'project.create',
     'project.read',
     'task.create',

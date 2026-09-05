@@ -17,7 +17,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { MoveTaskDto } from './dto/move-task.dto';
 
-// @UseGuards(AuthGuard, PermissionGuard)
+@UseGuards(AuthGuard, PermissionGuard)
 @Controller('organizations/:organizationId/projects/:projectId/tasks')
 export class TasksController {
   constructor(private readonly taskService: TasksService) {}

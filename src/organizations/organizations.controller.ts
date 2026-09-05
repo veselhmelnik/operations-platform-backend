@@ -26,11 +26,6 @@ export class OrganizationsController {
     private readonly projectService: ProjectsService,
   ) {}
 
-  // @Get()
-  // findAll() {
-  //   return this.organizationsService.getAllOrganizations();
-  // }
-
   @Get()
   getAll(@Req() request: Request) {
     return this.organizationsService.getUserOrganizations(request['user'].id);
@@ -87,5 +82,13 @@ export class OrganizationsController {
     @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
   ) {
     return this.projectService.getAllProjects(organizationId);
+  }
+
+  @RequirePermission('member.read')
+  @Get(':organizationId/members')
+  findAllMembers(
+    @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
+  ) {
+    return this.organizationsService.getOrganizationMembers(organizationId);
   }
 }

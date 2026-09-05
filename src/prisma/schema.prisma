@@ -84,11 +84,11 @@ model OrganizationInvitation {
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
-  token      String    @unique
+  token String @unique
+
   expiresAt  DateTime
   acceptedAt DateTime?
-
-  createdAt DateTime @default(now())
+  createdAt  DateTime  @default(now())
 }
 
 model Project {

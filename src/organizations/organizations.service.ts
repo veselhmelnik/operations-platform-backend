@@ -138,4 +138,23 @@ export class OrganizationsService {
       throw error;
     }
   }
+
+  getOrganizationMembers(organizationId: string) {
+    return this.prisma.organizationMember.findMany({
+      where: {
+        organizationId,
+      },
+      select: {
+        id: true,
+        role: true,
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+  }
 }
