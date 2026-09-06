@@ -4,10 +4,18 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskStatus } from 'src/generated/prisma/enums';
 import { MoveTaskDto } from './dto/move-task.dto';
+import { ActivityService } from 'src/activity/activity.service';
+import {
+  ActivityActions,
+  ActivityEntityType,
+} from 'src/activity/activityActions';
 
 @Injectable()
 export class TasksService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly activityService: ActivityService,
+  ) {}
 
   private async getProjectOrThrow(organizationId: string, projectId: string) {
     const project = await this.prismaService.project.findFirst({
@@ -114,6 +122,7 @@ export class TasksService {
   }
 
   async addNewTask(
+    userId: string,
     organizationId: string,
     projectId: string,
     dto: CreateTaskDto,
@@ -138,7 +147,7 @@ export class TasksService {
       },
     });
     const position = lastTask ? lastTask.position + 1 : 0;
-    return this.prismaService.task.create({
+    const task = await this.prismaService.task.create({
       data: {
         title: dto.title,
         projectId,
@@ -147,6 +156,15 @@ export class TasksService {
         position,
       },
     });
+
+    await this.activityService.create({
+      organizationId,
+      userId,
+      action: ActivityActions.TASK_CREATED,
+      entityType: ActivityEntityType.TASK,
+      entityId: task.id,
+    });
+    return task;
   }
 
   async updateTask(

@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -43,11 +44,17 @@ export class TasksController {
   @Post()
   @RequirePermission('task.create')
   create(
+    @Req() request: Request,
     @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
     @Param('projectId', new ParseUUIDPipe()) projectId: string,
     @Body() dto: CreateTaskDto,
   ) {
-    return this.taskService.addNewTask(organizationId, projectId, dto);
+    return this.taskService.addNewTask(
+      request['user'].id,
+      organizationId,
+      projectId,
+      dto,
+    );
   }
 
   @Patch(':taskId')

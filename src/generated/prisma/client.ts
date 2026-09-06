@@ -69,3 +69,13 @@ export type Project = Prisma.ProjectModel
  * 
  */
 export type Task = Prisma.TaskModel
+/**
+ * Model Subscription
+ * 
+ */
+export type Subscription = Prisma.SubscriptionModel
+/**
+ * Model Activity
+ * 
+ */
+export type Activity = Prisma.ActivityModel
