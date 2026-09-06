@@ -10,13 +10,13 @@ import {
 } from '@nestjs/common';
 import { OrganizationsService } from './organizations.service';
 import { CreateOrganizationDto } from 'src/organizations/dto/create-organization.dto';
-import { AddOrganizationMemberDto } from 'src/members/dto/add-member.dto';
 import { RequirePermission } from 'src/authorization/require-permission.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PermissionGuard } from 'src/authorization/permission.guard';
 import { CreateProjectDto } from '../projects/dto/create-project.dto';
 import { ProjectsService } from 'src/projects/projects.service';
 import { Request } from 'express';
+import { CreateInvitationDto } from 'src/invitations/dto/create-invitation.dto';
 
 @UseGuards(AuthGuard, PermissionGuard)
 @Controller('organizations')
@@ -51,8 +51,13 @@ export class OrganizationsController {
   createProject(
     @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
     @Body() dto: CreateProjectDto,
+    @Req() request: Request,
   ) {
-    return this.projectService.createProject(organizationId, dto);
+    return this.projectService.createProject(
+      organizationId,
+      dto,
+      request['user'].id,
+    );
   }
 
   @RequirePermission('project.read')

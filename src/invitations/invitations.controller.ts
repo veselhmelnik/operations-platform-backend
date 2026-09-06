@@ -29,12 +29,17 @@ export class InvitationsController {
     return this.invitationsService.acceptInvitation(token, request['user'].id);
   }
 
-  @RequirePermission('member.invite')
+  @RequirePermission('member.add')
   @Post(':organizationId/invitations')
   createInvitation(
     @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
     @Body() dto: CreateInvitationDto,
+    @Req() request: Request,
   ) {
-    return this.invitationsService.createInvitation(organizationId, dto);
+    return this.invitationsService.createInvitation(
+      organizationId,
+      dto,
+      request['user'].id,
+    );
   }
 }

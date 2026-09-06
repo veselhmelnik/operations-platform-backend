@@ -7,11 +7,13 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Req,
 } from '@nestjs/common';
 import { RequirePermission } from 'src/authorization/require-permission.decorator';
 import { AddOrganizationMemberDto } from './dto/add-member.dto';
 import { MembersService } from './members.service';
 import { UpdateOrganizationMemberDto } from './dto/update-member.dto';
+import { Request } from 'express';
 
 @Controller('organizations/:organizationId/members')
 export class MembersController {
@@ -39,8 +41,12 @@ export class MembersController {
   deleteMember(
     @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
     @Param('memberId', new ParseUUIDPipe()) memberId: string,
+    @Req() request: Request,
   ) {
-    return this.membersService.deleteOrganizationMember(memberId);
+    return this.membersService.deleteOrganizationMember(
+      memberId,
+      request['user'].id,
+    );
   }
 
   @RequirePermission('member.role.update')
@@ -49,7 +55,12 @@ export class MembersController {
     @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
     @Param('memberId', new ParseUUIDPipe()) memberId: string,
     @Body() dto: UpdateOrganizationMemberDto,
+    @Req() request: Request,
   ) {
-    return this.membersService.updateOrganizationMember(memberId, dto);
+    return this.membersService.updateOrganizationMember(
+      memberId,
+      dto,
+      request['user'].id,
+    );
   }
 }

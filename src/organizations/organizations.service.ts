@@ -1,16 +1,23 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
-import { AddOrganizationMemberDto } from 'src/members/dto/add-member.dto';
 import { CreateOrganizationDto } from 'src/organizations/dto/create-organization.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ActivityService } from 'src/activity/activity.service';
+import {
+  ActivityActions,
+  ActivityEntityType,
+} from 'src/activity/activityActions';
 
 @Injectable()
 export class OrganizationsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly activityService: ActivityService,
+  ) {}
 
   getAllOrganizations() {
     return this.prisma.organization.findMany({
@@ -74,7 +81,7 @@ export class OrganizationsService {
   }
 
   async createSingleOrganization(ownerId, dto: CreateOrganizationDto) {
-    return this.prisma.$transaction(async (tx) => {
+    const result = await this.prisma.$transaction(async (tx) => {
       const organization = await tx.organization.create({
         data: {
           name: dto.name,
@@ -100,5 +107,17 @@ export class OrganizationsService {
         },
       });
     });
+    if (!result) {
+      throw new BadRequestException('Something went wrong');
+    }
+    await this.activityService.create({
+      organizationId: result.id,
+      userId: ownerId,
+      action: ActivityActions.ORGANIZATION_CREATED,
+      entityType: ActivityEntityType.ORGANIZATION,
+      entityId: result.id,
+    });
+
+    return result;
   }
 }

@@ -8,12 +8,24 @@ import { randomBytes } from 'crypto';
 import { OrganizationRole } from 'src/generated/prisma/enums';
 import { CreateInvitationDto } from 'src/invitations/dto/create-invitation.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ActivityService } from 'src/activity/activity.service';
+import {
+  ActivityActions,
+  ActivityEntityType,
+} from 'src/activity/activityActions';
 
 @Injectable()
 export class InvitationsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly activityService: ActivityService,
+  ) {}
 
-  async createInvitation(organizationId: string, dto: CreateInvitationDto) {
+  async createInvitation(
+    organizationId: string,
+    dto: CreateInvitationDto,
+    userId?: string,
+  ) {
     const organization = await this.prisma.organization.findUnique({
       where: { id: organizationId },
     });
@@ -55,8 +67,9 @@ export class InvitationsService {
         },
       });
 
+    let invitation;
     if (existingInvitation) {
-      return await this.prisma.organizationInvitation.update({
+      const invitation = await this.prisma.organizationInvitation.update({
         where: { id: existingInvitation.id },
         data: {
           token,
@@ -64,17 +77,29 @@ export class InvitationsService {
           role: dto.role,
         },
       });
+    } else {
+      invitation = await this.prisma.organizationInvitation.create({
+        data: {
+          email,
+          role: dto.role,
+          organizationId,
+          token,
+          expiresAt,
+        },
+      });
     }
 
-    return await this.prisma.organizationInvitation.create({
-      data: {
-        email,
-        role: dto.role,
+    if (userId) {
+      await this.activityService.create({
         organizationId,
-        token,
-        expiresAt,
-      },
-    });
+        userId,
+        action: ActivityActions.MEMBER_INVITED,
+        entityType: ActivityEntityType.INVITATION,
+        entityId: invitation.id,
+      });
+    }
+
+    return invitation;
   }
 
   async getInvitationByToken(token: string) {
@@ -145,7 +170,7 @@ export class InvitationsService {
       );
     }
 
-    return await this.prisma.$transaction(async (tx) => {
+    const result = await this.prisma.$transaction(async (tx) => {
       const accepted = await tx.organizationInvitation.updateMany({
         where: {
           id: invitation.id,
@@ -181,5 +206,15 @@ export class InvitationsService {
         organization: invitation.organization,
       };
     });
+
+    await this.activityService.create({
+      organizationId: invitation.organizationId,
+      userId,
+      action: ActivityActions.MEMBER_JOINED,
+      entityType: ActivityEntityType.MEMBER,
+      entityId: userId,
+    });
+
+    return result;
   }
 }

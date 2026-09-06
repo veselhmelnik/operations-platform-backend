@@ -172,6 +172,7 @@ export class TasksService {
     projectId: string,
     taskId: string,
     dto: UpdateTaskDto,
+    userId?: string,
   ) {
     await this.getTaskOrThrow(organizationId, projectId, taskId);
     if (dto.assigneeId) {
@@ -180,7 +181,7 @@ export class TasksService {
         dto.assigneeId,
       );
     }
-    return this.prismaService.task.update({
+    const updatedTask = await this.prismaService.task.update({
       where: {
         id: taskId,
       },
@@ -191,6 +192,18 @@ export class TasksService {
         status: dto.status,
       },
     });
+
+    if (userId) {
+      await this.activityService.create({
+        organizationId,
+        userId,
+        action: ActivityActions.TASK_UPDATED,
+        entityType: ActivityEntityType.TASK,
+        entityId: taskId,
+      });
+    }
+
+    return updatedTask;
   }
 
   async moveTask(
@@ -198,6 +211,7 @@ export class TasksService {
     projectId: string,
     taskId: string,
     dto: MoveTaskDto,
+    userId?: string,
   ) {
     const task = await this.getTaskOrThrow(organizationId, projectId, taskId);
 
@@ -210,7 +224,7 @@ export class TasksService {
       return task;
     }
 
-    return this.prismaService.$transaction(async (tx) => {
+    const movedTask = await this.prismaService.$transaction(async (tx) => {
       if (oldStatus === newStatus) {
         if (newPosition < oldPosition) {
           await tx.task.updateMany({
@@ -286,10 +300,27 @@ export class TasksService {
         },
       });
     });
+
+    if (userId) {
+      await this.activityService.create({
+        organizationId,
+        userId,
+        action: ActivityActions.TASK_MOVED,
+        entityType: ActivityEntityType.TASK,
+        entityId: taskId,
+      });
+    }
+
+    return movedTask;
   }
-  async deleteTask(organizationId: string, projectId: string, taskId: string) {
+  async deleteTask(
+    organizationId: string,
+    projectId: string,
+    taskId: string,
+    userId?: string,
+  ) {
     const task = await this.getTaskOrThrow(organizationId, projectId, taskId);
-    return this.prismaService.$transaction(async (tx) => {
+    const result = await this.prismaService.$transaction(async (tx) => {
       await tx.task.delete({
         where: {
           id: taskId,
@@ -311,5 +342,17 @@ export class TasksService {
       });
       return { message: 'Task deleted successfully' };
     });
+
+    if (userId) {
+      await this.activityService.create({
+        organizationId,
+        userId,
+        action: ActivityActions.TASK_DELETED,
+        entityType: ActivityEntityType.TASK,
+        entityId: taskId,
+      });
+    }
+
+    return result;
   }
 }

@@ -9,10 +9,18 @@ import { AddOrganizationMemberDto } from 'src/members/dto/add-member.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateOrganizationMemberDto } from './dto/update-member.dto';
 import { OrganizationRole } from 'src/generated/prisma/enums';
+import { ActivityService } from 'src/activity/activity.service';
+import {
+  ActivityActions,
+  ActivityEntityType,
+} from 'src/activity/activityActions';
 
 @Injectable()
 export class MembersService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly activityService: ActivityService,
+  ) {}
   private async getMemberOrThrow(memberId: string) {
     const member = await this.prismaService.organizationMember.findUnique({
       where: {
@@ -82,7 +90,7 @@ export class MembersService {
     });
   }
 
-  async deleteOrganizationMember(memberId: string) {
+  async deleteOrganizationMember(memberId: string, userId?: string) {
     const member = await this.getMemberOrThrow(memberId);
 
     if (member.role === OrganizationRole.OWNER) {
@@ -98,16 +106,29 @@ export class MembersService {
       }
     }
 
-    return this.prismaService.organizationMember.delete({
+    const result = await this.prismaService.organizationMember.delete({
       where: {
         id: memberId,
       },
     });
+
+    if (userId) {
+      await this.activityService.create({
+        organizationId: member.organizationId,
+        userId,
+        action: ActivityActions.MEMBER_REMOVED,
+        entityType: ActivityEntityType.MEMBER,
+        entityId: member.userId,
+      });
+    }
+
+    return result;
   }
 
   async updateOrganizationMember(
     memberId: string,
     dto: UpdateOrganizationMemberDto,
+    userId?: string,
   ) {
     const member = await this.getMemberOrThrow(memberId);
 
@@ -127,7 +148,8 @@ export class MembersService {
         throw new BadRequestException('The only OWNER cannot be downgraded');
       }
     }
-    return this.prismaService.organizationMember.update({
+
+    const result = await this.prismaService.organizationMember.update({
       where: {
         id: memberId,
       },
@@ -135,5 +157,17 @@ export class MembersService {
         role: dto.role,
       },
     });
+
+    if (userId) {
+      await this.activityService.create({
+        organizationId: member.organizationId,
+        userId,
+        action: ActivityActions.MEMBER_ROLE_CHANGED,
+        entityType: ActivityEntityType.MEMBER,
+        entityId: member.userId,
+      });
+    }
+
+    return result;
   }
 }

@@ -17,6 +17,7 @@ import { RequirePermission } from 'src/authorization/require-permission.decorato
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { MoveTaskDto } from './dto/move-task.dto';
+import { Request } from 'express';
 
 @UseGuards(AuthGuard, PermissionGuard)
 @Controller('organizations/:organizationId/projects/:projectId/tasks')
@@ -64,8 +65,15 @@ export class TasksController {
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Param('taskId', ParseUUIDPipe) taskId: string,
     @Body() dto: UpdateTaskDto,
+    @Req() request: Request,
   ) {
-    return this.taskService.updateTask(organitionId, projectId, taskId, dto);
+    return this.taskService.updateTask(
+      organitionId,
+      projectId,
+      taskId,
+      dto,
+      request['user'].id,
+    );
   }
 
   @Patch(':taskId/move')
@@ -75,8 +83,15 @@ export class TasksController {
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Param('taskId', ParseUUIDPipe) taskId: string,
     @Body() dto: MoveTaskDto,
+    @Req() request: Request,
   ) {
-    return this.taskService.moveTask(organitionId, projectId, taskId, dto);
+    return this.taskService.moveTask(
+      organitionId,
+      projectId,
+      taskId,
+      dto,
+      request['user'].id,
+    );
   }
 
   @Delete(':taskId')
@@ -85,7 +100,13 @@ export class TasksController {
     @Param('organizationId', ParseUUIDPipe) organitionId: string,
     @Param('projectId', ParseUUIDPipe) projectId: string,
     @Param('taskId', ParseUUIDPipe) taskId: string,
+    @Req() request: Request,
   ) {
-    return this.taskService.deleteTask(organitionId, projectId, taskId);
+    return this.taskService.deleteTask(
+      organitionId,
+      projectId,
+      taskId,
+      request['user'].id,
+    );
   }
 }
