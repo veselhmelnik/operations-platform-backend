@@ -6,6 +6,7 @@ export const ROLE_PERMISSIONS: Record<OrganizationRole, Permission[]> = {
     'organization.delete',
     'member.read',
     'member.add',
+    'member.invite',
     'member.remove',
     'member.role.update',
     'project.create',
@@ -20,6 +21,7 @@ export const ROLE_PERMISSIONS: Record<OrganizationRole, Permission[]> = {
   ADMIN: [
     'member.read',
     'member.add',
+    'member.invite',
     'member.remove',
     'member.role.update',
     'project.create',

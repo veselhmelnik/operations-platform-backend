@@ -5,6 +5,7 @@ export type Permission =
   | 'organization.delete'
   | 'member.read'
   | 'member.add'
+  | 'member.invite'
   | 'member.remove'
   | 'member.role.update'
   | 'project.create'

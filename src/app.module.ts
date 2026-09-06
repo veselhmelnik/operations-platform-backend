@@ -11,6 +11,7 @@ import { ProjectsService } from './projects/projects.service';
 import { ProjectsModule } from './projects/projects.module';
 import { TasksService } from './tasks/tasks.service';
 import { TasksModule } from './tasks/tasks.module';
+import { InvitationsModule } from './invitations/invitations.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TasksModule } from './tasks/tasks.module';
     AuthorizationModule,
     ProjectsModule,
     TasksModule,
+    InvitationsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ProjectsService, TasksService],
