@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { RequirePermission } from 'src/authorization/require-permission.decorator';
-import { CreateProjectDto } from 'src/organizations/dto/create-project.dto';
+import { CreateProjectDto } from 'src/projects/dto/create-project.dto';
 
 @Controller('/organizations/:organizationId/projects')
 export class ProjectsController {

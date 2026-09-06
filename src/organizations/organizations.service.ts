@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
-import { AddOrganizationMemberDto } from 'src/organizations/dto/add-organization-member.dto';
+import { AddOrganizationMemberDto } from 'src/members/dto/add-member.dto';
 import { CreateOrganizationDto } from 'src/organizations/dto/create-organization.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -73,7 +73,7 @@ export class OrganizationsService {
     return organization;
   }
 
-  async createOneOrganization(ownerId, dto: CreateOrganizationDto) {
+  async createSingleOrganization(ownerId, dto: CreateOrganizationDto) {
     return this.prisma.$transaction(async (tx) => {
       const organization = await tx.organization.create({
         data: {
@@ -99,62 +99,6 @@ export class OrganizationsService {
           },
         },
       });
-    });
-  }
-
-  async addMemberToOrganization(
-    dto: AddOrganizationMemberDto,
-    organizationId: string,
-  ) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        id: dto.userId,
-      },
-    });
-    if (!user) throw new NotFoundException('User not found');
-    const organization = await this.prisma.organization.findUnique({
-      where: {
-        id: organizationId,
-      },
-    });
-    if (!organization) throw new NotFoundException('Organization not found');
-    try {
-      return await this.prisma.organizationMember.create({
-        data: {
-          organizationId,
-          userId: dto.userId,
-          role: dto.role,
-        },
-      });
-    } catch (error) {
-      if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === 'P2002'
-      ) {
-        throw new ConflictException(
-          'User is already a member of this organization',
-        );
-      }
-      throw error;
-    }
-  }
-
-  getOrganizationMembers(organizationId: string) {
-    return this.prisma.organizationMember.findMany({
-      where: {
-        organizationId,
-      },
-      select: {
-        id: true,
-        role: true,
-        user: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
     });
   }
 }

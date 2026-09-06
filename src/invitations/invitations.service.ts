@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import { OrganizationRole } from 'src/generated/prisma/enums';
-import { CreateInvitationDto } from 'src/organizations/dto/create-invitation.dto';
+import { CreateInvitationDto } from 'src/invitations/dto/create-invitation.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()

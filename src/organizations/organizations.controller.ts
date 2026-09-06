@@ -10,11 +10,11 @@ import {
 } from '@nestjs/common';
 import { OrganizationsService } from './organizations.service';
 import { CreateOrganizationDto } from 'src/organizations/dto/create-organization.dto';
-import { AddOrganizationMemberDto } from 'src/organizations/dto/add-organization-member.dto';
+import { AddOrganizationMemberDto } from 'src/members/dto/add-member.dto';
 import { RequirePermission } from 'src/authorization/require-permission.decorator';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { PermissionGuard } from 'src/authorization/permission.guard';
-import { CreateProjectDto } from './dto/create-project.dto';
+import { CreateProjectDto } from '../projects/dto/create-project.dto';
 import { ProjectsService } from 'src/projects/projects.service';
 import { Request } from 'express';
 
@@ -40,21 +40,9 @@ export class OrganizationsController {
 
   @Post()
   create(@Req() request: Request, @Body() dto: CreateOrganizationDto) {
-    return this.organizationsService.createOneOrganization(
+    return this.organizationsService.createSingleOrganization(
       request['user'].id,
       dto,
-    );
-  }
-
-  @RequirePermission('member.add')
-  @Post(':organizationId/members')
-  addMember(
-    @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
-    @Body() dto: AddOrganizationMemberDto,
-  ) {
-    return this.organizationsService.addMemberToOrganization(
-      dto,
-      organizationId,
     );
   }
 
@@ -82,13 +70,5 @@ export class OrganizationsController {
     @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
   ) {
     return this.projectService.getAllProjects(organizationId);
-  }
-
-  @RequirePermission('member.read')
-  @Get(':organizationId/members')
-  findAllMembers(
-    @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
-  ) {
-    return this.organizationsService.getOrganizationMembers(organizationId);
   }
 }

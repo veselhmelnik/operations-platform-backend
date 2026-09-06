@@ -11,7 +11,7 @@ import {
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 import { InvitationsService } from './invitations.service';
-import { CreateInvitationDto } from 'src/organizations/dto/create-invitation.dto';
+import { CreateInvitationDto } from 'src/invitations/dto/create-invitation.dto';
 import { RequirePermission } from 'src/authorization/require-permission.decorator';
 
 @Controller('invitations')

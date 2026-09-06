@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { TaskStatus } from 'src/generated/prisma/enums';
-import { CreateProjectDto } from 'src/organizations/dto/create-project.dto';
+import { CreateProjectDto } from 'src/projects/dto/create-project.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
