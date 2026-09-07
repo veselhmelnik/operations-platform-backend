@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -19,5 +20,13 @@ export class ActivityController {
   @Get()
   getAll(@Param('organizationId', new ParseUUIDPipe()) organizationId: string) {
     return this.activity.getAll(organizationId);
+  }
+
+  @RequirePermission('activity.delete')
+  @Delete('delete')
+  deleteAll(
+    @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
+  ) {
+    return this.activity.deleteAll(organizationId);
   }
 }

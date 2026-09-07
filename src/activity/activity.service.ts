@@ -31,4 +31,12 @@ export class ActivityService {
       },
     });
   }
+
+  deleteAll(organizationId: string) {
+    return this.prisma.activity.deleteMany({
+      where: {
+        organizationId,
+      },
+    });
+  }
 }
