@@ -13,6 +13,7 @@ import { Request } from 'express';
 import { InvitationsService } from './invitations.service';
 import { CreateInvitationDto } from 'src/invitations/dto/create-invitation.dto';
 import { RequirePermission } from 'src/authorization/require-permission.decorator';
+import { PermissionGuard } from 'src/authorization/permission.guard';
 
 @Controller('invitations')
 export class InvitationsController {
@@ -29,8 +30,9 @@ export class InvitationsController {
     return this.invitationsService.acceptInvitation(token, request['user'].id);
   }
 
+  @UseGuards(AuthGuard, PermissionGuard)
   @RequirePermission('member.add')
-  @Post(':organizationId/invitations')
+  @Post(':organizationId')
   createInvitation(
     @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
     @Body() dto: CreateInvitationDto,

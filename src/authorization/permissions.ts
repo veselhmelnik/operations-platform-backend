@@ -16,6 +16,7 @@ export const ROLE_PERMISSIONS: Record<OrganizationRole, Permission[]> = {
     'task.read',
     'comment.create',
     'task.delete',
+    'activity.read',
   ],
 
   ADMIN: [
@@ -31,6 +32,7 @@ export const ROLE_PERMISSIONS: Record<OrganizationRole, Permission[]> = {
     'task.read',
     'comment.create',
     'task.delete',
+    'activity.read',
   ],
 
   MANAGER: [

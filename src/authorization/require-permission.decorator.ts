@@ -15,6 +15,7 @@ export type Permission =
   | 'task.read'
   | 'comment.create'
   | 'user.add'
-  | 'task.delete';
+  | 'task.delete'
+  | 'activity.read';
 export const RequirePermission = (...permissions: Permission[]) =>
   SetMetadata(REQUIRE_PERMISSION_KEY, permissions);
