@@ -1,4 +1,25 @@
-import { Controller } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  UseGuards,
+} from '@nestjs/common';
+import { SubscriptionService } from './subscription.service';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { PermissionGuard } from 'src/authorization/permission.guard';
+import { RequirePermission } from 'src/authorization/require-permission.decorator';
 
-@Controller('subscription')
-export class SubscriptionController {}
+@UseGuards(AuthGuard, PermissionGuard)
+@Controller('organizations/:organizationId/subscription')
+export class SubscriptionController {
+  constructor(private readonly subscriptionService: SubscriptionService) {}
+
+  @RequirePermission('subscription.read')
+  @Get()
+  getSubscription(
+    @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
+  ) {
+    return this.subscriptionService.getOrganizationSubscription(organizationId);
+  }
+}

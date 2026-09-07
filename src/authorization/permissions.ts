@@ -18,6 +18,8 @@ export const ROLE_PERMISSIONS: Record<OrganizationRole, Permission[]> = {
     'task.delete',
     'activity.read',
     'activity.delete',
+    'subscription.update',
+    'subscription.read',
   ],
 
   ADMIN: [
@@ -35,6 +37,8 @@ export const ROLE_PERMISSIONS: Record<OrganizationRole, Permission[]> = {
     'task.delete',
     'activity.read',
     'activity.delete',
+    'subscription.update',
+    'subscription.read',
   ],
 
   MANAGER: [
