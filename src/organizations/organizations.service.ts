@@ -11,6 +11,10 @@ import {
   ActivityActions,
   ActivityEntityType,
 } from 'src/activity/activityActions';
+import {
+  SubscriptionPlan,
+  SubscriptionStatus,
+} from 'src/generated/prisma/enums';
 
 @Injectable()
 export class OrganizationsService {
@@ -92,6 +96,13 @@ export class OrganizationsService {
           userId: ownerId,
           organizationId: organization.id,
           role: 'OWNER',
+        },
+      });
+      await tx.subscription.create({
+        data: {
+          organizationId: organization.id,
+          plan: SubscriptionPlan.FREE,
+          status: SubscriptionStatus.ACTIVE,
         },
       });
       return tx.organization.findUnique({

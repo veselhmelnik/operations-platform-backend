@@ -14,12 +14,14 @@ import {
   ActivityActions,
   ActivityEntityType,
 } from 'src/activity/activityActions';
+import { SubscriptionService } from 'src/subscription/subscription.service';
 
 @Injectable()
 export class MembersService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly activityService: ActivityService,
+    private readonly subscriptionService: SubscriptionService,
   ) {}
   private async getMemberOrThrow(memberId: string) {
     const member = await this.prismaService.organizationMember.findUnique({
@@ -45,6 +47,7 @@ export class MembersService {
     dto: AddOrganizationMemberDto,
     organizationId: string,
   ) {
+    await this.subscriptionService.assertCanCreateProject(organizationId);
     const user = await this.prismaService.user.findUnique({
       where: {
         id: dto.userId,

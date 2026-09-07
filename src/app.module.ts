@@ -15,6 +15,7 @@ import { InvitationsModule } from './invitations/invitations.module';
 import { MembersService } from './members/members.service';
 import { MembersModule } from './members/members.module';
 import { ActivityModule } from './activity/activity.module';
+import { SubscriptionModule } from './subscription/subscription.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ActivityModule } from './activity/activity.module';
     InvitationsModule,
     MembersModule,
     ActivityModule,
+    SubscriptionModule,
   ],
   controllers: [AppController],
   providers: [AppService, ProjectsService, TasksService, MembersService],

@@ -13,12 +13,14 @@ import {
   ActivityActions,
   ActivityEntityType,
 } from 'src/activity/activityActions';
+import { SubscriptionService } from 'src/subscription/subscription.service';
 
 @Injectable()
 export class InvitationsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly activityService: ActivityService,
+    private readonly subscriptionService: SubscriptionService,
   ) {}
 
   async createInvitation(
@@ -174,23 +176,11 @@ export class InvitationsService {
       );
     }
 
-    const result = await this.prisma.$transaction(async (tx) => {
-      const accepted = await tx.organizationInvitation.updateMany({
-        where: {
-          id: invitation.id,
-          acceptedAt: null,
-          expiresAt: {
-            gt: new Date(),
-          },
-        },
-        data: {
-          acceptedAt: new Date(),
-        },
-      });
+    await this.subscriptionService.assertCanAddMember(
+      invitation.organizationId,
+    );
 
-      if (accepted.count === 0) {
-        throw new ConflictException('Invitation is no longer available');
-      }
+    return this.prisma.$transaction(async (tx) => {
       await tx.organizationMember.create({
         data: {
           userId,
@@ -200,7 +190,9 @@ export class InvitationsService {
       });
 
       await tx.organizationInvitation.update({
-        where: { id: invitation.id },
+        where: {
+          id: invitation.id,
+        },
         data: {
           acceptedAt: new Date(),
         },
@@ -210,19 +202,5 @@ export class InvitationsService {
         organization: invitation.organization,
       };
     });
-
-    await this.activityService.create({
-      organizationId: invitation.organizationId,
-      userId,
-      action: ActivityActions.MEMBER_JOINED,
-      entityType: ActivityEntityType.MEMBER,
-      entityId: userId,
-      metadata: {
-        memberName: user.name,
-        email: user.email,
-      },
-    });
-
-    return result;
   }
 }
