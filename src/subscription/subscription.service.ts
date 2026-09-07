@@ -30,6 +30,41 @@ export class SubscriptionService {
     return subscription;
   }
 
+  async getSubscriptionSummary(organizationId: string) {
+    const subscription = await this.getOrganizationSubscription(organizationId);
+
+    if (!subscription) {
+      throw new NotFoundException('Subscription not found');
+    }
+
+    const [projects, members] = await Promise.all([
+      this.prisma.project.count({
+        where: { organizationId },
+      }),
+      this.prisma.organizationMember.count({
+        where: { organizationId },
+      }),
+    ]);
+
+    const limits = PLAN_LIMITS[subscription.plan];
+
+    return {
+      plan: subscription.plan,
+      status: subscription.status,
+      cancelAtPeriodEnd: subscription.cancelAtPeriodEnd,
+      currentPeriodEnd: subscription.currentPeriodEnd,
+      usage: {
+        projects,
+        members,
+      },
+
+      limits: {
+        projects: limits.projects,
+        members: limits.members,
+      },
+    };
+  }
+
   async assertCanCreateProject(organizationId: string) {
     const subscription = await this.getOrganizationSubscription(organizationId);
     if (!subscription)

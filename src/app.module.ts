@@ -16,6 +16,7 @@ import { MembersService } from './members/members.service';
 import { MembersModule } from './members/members.module';
 import { ActivityModule } from './activity/activity.module';
 import { SubscriptionModule } from './subscription/subscription.module';
+import { BillingModule } from './billing/billing.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { SubscriptionModule } from './subscription/subscription.module';
     MembersModule,
     ActivityModule,
     SubscriptionModule,
+    BillingModule,
   ],
   controllers: [AppController],
   providers: [AppService, ProjectsService, TasksService, MembersService],

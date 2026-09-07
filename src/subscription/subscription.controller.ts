@@ -18,8 +18,9 @@ export class SubscriptionController {
   @RequirePermission('subscription.read')
   @Get()
   getSubscription(
-    @Param('organizationId', new ParseUUIDPipe()) organizationId: string,
+    @Param('organizationId', ParseUUIDPipe)
+    organizationId: string,
   ) {
-    return this.subscriptionService.getOrganizationSubscription(organizationId);
+    return this.subscriptionService.getSubscriptionSummary(organizationId);
   }
 }

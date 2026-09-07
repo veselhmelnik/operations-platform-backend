@@ -19,6 +19,7 @@ export type Permission =
   | 'activity.read'
   | 'activity.delete'
   | 'subscription.update'
-  | 'subscription.read';
+  | 'subscription.read'
+  | 'billing.manage';
 export const RequirePermission = (...permissions: Permission[]) =>
   SetMetadata(REQUIRE_PERMISSION_KEY, permissions);
