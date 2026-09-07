@@ -116,6 +116,9 @@ export class OrganizationsService {
       action: ActivityActions.ORGANIZATION_CREATED,
       entityType: ActivityEntityType.ORGANIZATION,
       entityId: result.id,
+      metadata: {
+        name: result.name,
+      },
     });
 
     return result;

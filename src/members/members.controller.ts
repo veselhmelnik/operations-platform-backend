@@ -8,13 +8,17 @@ import {
   Patch,
   Post,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { RequirePermission } from 'src/authorization/require-permission.decorator';
 import { AddOrganizationMemberDto } from './dto/add-member.dto';
 import { MembersService } from './members.service';
 import { UpdateOrganizationMemberDto } from './dto/update-member.dto';
 import { Request } from 'express';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { PermissionGuard } from 'src/authorization/permission.guard';
 
+@UseGuards(AuthGuard, PermissionGuard)
 @Controller('organizations/:organizationId/members')
 export class MembersController {
   constructor(private readonly membersService: MembersService) {}

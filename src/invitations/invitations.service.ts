@@ -69,7 +69,7 @@ export class InvitationsService {
 
     let invitation;
     if (existingInvitation) {
-      const invitation = await this.prisma.organizationInvitation.update({
+      invitation = await this.prisma.organizationInvitation.update({
         where: { id: existingInvitation.id },
         data: {
           token,
@@ -96,6 +96,10 @@ export class InvitationsService {
         action: ActivityActions.MEMBER_INVITED,
         entityType: ActivityEntityType.INVITATION,
         entityId: invitation.id,
+        metadata: {
+          email: invitation.email,
+          role: invitation.role,
+        },
       });
     }
 
@@ -213,6 +217,10 @@ export class InvitationsService {
       action: ActivityActions.MEMBER_JOINED,
       entityType: ActivityEntityType.MEMBER,
       entityId: userId,
+      metadata: {
+        memberName: user.name,
+        email: user.email,
+      },
     });
 
     return result;

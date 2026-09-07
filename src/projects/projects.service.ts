@@ -55,6 +55,9 @@ export class ProjectsService {
         action: ActivityActions.PROJECT_CREATED,
         entityType: ActivityEntityType.PROJECT,
         entityId: project.id,
+        metadata: {
+          name: project.name,
+        },
       });
     }
 

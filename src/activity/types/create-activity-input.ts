@@ -1,3 +1,4 @@
+import { Prisma } from 'src/generated/prisma/client';
 import { ActivityActions, ActivityEntityType } from '../activityActions';
 
 export type CreateActivityInput = {
@@ -6,4 +7,5 @@ export type CreateActivityInput = {
   action: ActivityActions;
   entityType: ActivityEntityType;
   entityId?: string;
+  metadata?: Prisma.InputJsonValue;
 };

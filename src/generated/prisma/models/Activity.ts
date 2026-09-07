@@ -51,6 +51,7 @@ export type ActivityCountAggregateOutputType = {
   action: number
   entityType: number
   entityId: number
+  metadata: number
   createdAt: number
   _all: number
 }
@@ -83,6 +84,7 @@ export type ActivityCountAggregateInputType = {
   action?: true
   entityType?: true
   entityId?: true
+  metadata?: true
   createdAt?: true
   _all?: true
 }
@@ -166,6 +168,7 @@ export type ActivityGroupByOutputType = {
   action: string
   entityType: string
   entityId: string | null
+  metadata: runtime.JsonValue | null
   createdAt: Date
   _count: ActivityCountAggregateOutputType | null
   _min: ActivityMinAggregateOutputType | null
@@ -197,6 +200,7 @@ export type ActivityWhereInput = {
   action?: Prisma.StringFilter<"Activity"> | string
   entityType?: Prisma.StringFilter<"Activity"> | string
   entityId?: Prisma.StringNullableFilter<"Activity"> | string | null
+  metadata?: Prisma.JsonNullableFilter<"Activity">
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -209,6 +213,7 @@ export type ActivityOrderByWithRelationInput = {
   action?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrderInput | Prisma.SortOrder
+  metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
@@ -224,6 +229,7 @@ export type ActivityWhereUniqueInput = Prisma.AtLeast<{
   action?: Prisma.StringFilter<"Activity"> | string
   entityType?: Prisma.StringFilter<"Activity"> | string
   entityId?: Prisma.StringNullableFilter<"Activity"> | string | null
+  metadata?: Prisma.JsonNullableFilter<"Activity">
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
@@ -236,6 +242,7 @@ export type ActivityOrderByWithAggregationInput = {
   action?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrderInput | Prisma.SortOrder
+  metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ActivityCountOrderByAggregateInput
   _max?: Prisma.ActivityMaxOrderByAggregateInput
@@ -252,6 +259,7 @@ export type ActivityScalarWhereWithAggregatesInput = {
   action?: Prisma.StringWithAggregatesFilter<"Activity"> | string
   entityType?: Prisma.StringWithAggregatesFilter<"Activity"> | string
   entityId?: Prisma.StringNullableWithAggregatesFilter<"Activity"> | string | null
+  metadata?: Prisma.JsonNullableWithAggregatesFilter<"Activity">
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Activity"> | Date | string
 }
 
@@ -260,6 +268,7 @@ export type ActivityCreateInput = {
   action: string
   entityType: string
   entityId?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutActivitiesInput
   user?: Prisma.UserCreateNestedOneWithoutActivitiesInput
@@ -272,6 +281,7 @@ export type ActivityUncheckedCreateInput = {
   action: string
   entityType: string
   entityId?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -280,6 +290,7 @@ export type ActivityUpdateInput = {
   action?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutActivitiesNestedInput
   user?: Prisma.UserUpdateOneWithoutActivitiesNestedInput
@@ -292,6 +303,7 @@ export type ActivityUncheckedUpdateInput = {
   action?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -302,6 +314,7 @@ export type ActivityCreateManyInput = {
   action: string
   entityType: string
   entityId?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -310,6 +323,7 @@ export type ActivityUpdateManyMutationInput = {
   action?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -320,6 +334,7 @@ export type ActivityUncheckedUpdateManyInput = {
   action?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -340,6 +355,7 @@ export type ActivityCountOrderByAggregateInput = {
   action?: Prisma.SortOrder
   entityType?: Prisma.SortOrder
   entityId?: Prisma.SortOrder
+  metadata?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -452,6 +468,7 @@ export type ActivityCreateWithoutUserInput = {
   action: string
   entityType: string
   entityId?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   organization: Prisma.OrganizationCreateNestedOneWithoutActivitiesInput
 }
@@ -462,6 +479,7 @@ export type ActivityUncheckedCreateWithoutUserInput = {
   action: string
   entityType: string
   entityId?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -501,6 +519,7 @@ export type ActivityScalarWhereInput = {
   action?: Prisma.StringFilter<"Activity"> | string
   entityType?: Prisma.StringFilter<"Activity"> | string
   entityId?: Prisma.StringNullableFilter<"Activity"> | string | null
+  metadata?: Prisma.JsonNullableFilter<"Activity">
   createdAt?: Prisma.DateTimeFilter<"Activity"> | Date | string
 }
 
@@ -509,6 +528,7 @@ export type ActivityCreateWithoutOrganizationInput = {
   action: string
   entityType: string
   entityId?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
   user?: Prisma.UserCreateNestedOneWithoutActivitiesInput
 }
@@ -519,6 +539,7 @@ export type ActivityUncheckedCreateWithoutOrganizationInput = {
   action: string
   entityType: string
   entityId?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -554,6 +575,7 @@ export type ActivityCreateManyUserInput = {
   action: string
   entityType: string
   entityId?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -562,6 +584,7 @@ export type ActivityUpdateWithoutUserInput = {
   action?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutActivitiesNestedInput
 }
@@ -572,6 +595,7 @@ export type ActivityUncheckedUpdateWithoutUserInput = {
   action?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -581,6 +605,7 @@ export type ActivityUncheckedUpdateManyWithoutUserInput = {
   action?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -590,6 +615,7 @@ export type ActivityCreateManyOrganizationInput = {
   action: string
   entityType: string
   entityId?: string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Date | string
 }
 
@@ -598,6 +624,7 @@ export type ActivityUpdateWithoutOrganizationInput = {
   action?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneWithoutActivitiesNestedInput
 }
@@ -608,6 +635,7 @@ export type ActivityUncheckedUpdateWithoutOrganizationInput = {
   action?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -617,6 +645,7 @@ export type ActivityUncheckedUpdateManyWithoutOrganizationInput = {
   action?: Prisma.StringFieldUpdateOperationsInput | string
   entityType?: Prisma.StringFieldUpdateOperationsInput | string
   entityId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -629,6 +658,7 @@ export type ActivitySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   action?: boolean
   entityType?: boolean
   entityId?: boolean
+  metadata?: boolean
   createdAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.Activity$userArgs<ExtArgs>
@@ -641,6 +671,7 @@ export type ActivitySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   action?: boolean
   entityType?: boolean
   entityId?: boolean
+  metadata?: boolean
   createdAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.Activity$userArgs<ExtArgs>
@@ -653,6 +684,7 @@ export type ActivitySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   action?: boolean
   entityType?: boolean
   entityId?: boolean
+  metadata?: boolean
   createdAt?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.Activity$userArgs<ExtArgs>
@@ -665,10 +697,11 @@ export type ActivitySelectScalar = {
   action?: boolean
   entityType?: boolean
   entityId?: boolean
+  metadata?: boolean
   createdAt?: boolean
 }
 
-export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "userId" | "action" | "entityType" | "entityId" | "createdAt", ExtArgs["result"]["activity"]>
+export type ActivityOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "organizationId" | "userId" | "action" | "entityType" | "entityId" | "metadata" | "createdAt", ExtArgs["result"]["activity"]>
 export type ActivityInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.Activity$userArgs<ExtArgs>
@@ -695,6 +728,7 @@ export type $ActivityPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     action: string
     entityType: string
     entityId: string | null
+    metadata: runtime.JsonValue | null
     createdAt: Date
   }, ExtArgs["result"]["activity"]>
   composites: {}
@@ -1127,6 +1161,7 @@ export interface ActivityFieldRefs {
   readonly action: Prisma.FieldRef<"Activity", 'String'>
   readonly entityType: Prisma.FieldRef<"Activity", 'String'>
   readonly entityId: Prisma.FieldRef<"Activity", 'String'>
+  readonly metadata: Prisma.FieldRef<"Activity", 'Json'>
   readonly createdAt: Prisma.FieldRef<"Activity", 'DateTime'>
 }
     

@@ -152,5 +152,6 @@ model Activity {
   entityType String
   entityId   String?
 
+  metadata  Json?
   createdAt DateTime @default(now())
 }

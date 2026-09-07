@@ -26,6 +26,13 @@ export class MembersService {
       where: {
         id: memberId,
       },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     if (!member) {
@@ -119,6 +126,9 @@ export class MembersService {
         action: ActivityActions.MEMBER_REMOVED,
         entityType: ActivityEntityType.MEMBER,
         entityId: member.userId,
+        metadata: {
+          memberName: member.user.name,
+        },
       });
     }
 
@@ -135,6 +145,8 @@ export class MembersService {
     if (dto.role === OrganizationRole.OWNER) {
       throw new BadRequestException('OWNER role cannot be assigned directly');
     }
+
+    const oldRole = member.role;
 
     if (member.role === OrganizationRole.OWNER) {
       const ownersCount = await this.prismaService.organizationMember.count({
@@ -165,6 +177,11 @@ export class MembersService {
         action: ActivityActions.MEMBER_ROLE_CHANGED,
         entityType: ActivityEntityType.MEMBER,
         entityId: member.userId,
+        metadata: {
+          memberName: member.user.name,
+          oldRole,
+          newRole: dto.role,
+        },
       });
     }
 

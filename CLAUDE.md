@@ -62,9 +62,12 @@ The app is organized into domain-driven modules under `src/`:
 
 - **auth/** - JWT authentication, login/register endpoints, auth guards
 - **users/** - User CRUD operations
-- **organizations/** - Organization management, member invitations, subscription
+- **organizations/** - Organization management, subscription
+- **members/** - Organization member management (list, update role, remove)
+- **invitations/** - Organization invitation creation/acceptance flow
 - **projects/** - Project CRUD within organizations
 - **tasks/** - Task management (create, update, move between statuses)
+- **activity/** - Audit log reads/writes for organization actions
 - **authorization/** - Permission checks, RBAC decorators, permission guards
 - **prisma/** - Database connection & service (global provider)
 
@@ -77,15 +80,16 @@ Each module typically contains:
 
 ### Data Model
 
-The Prisma schema (`src/prisma/schema.prisma`) defines 7 core models:
+The Prisma schema (`src/prisma/schema.prisma`) defines 8 core models:
 
 - **User** - Email, name, password hash; has memberships in organizations and assigned tasks
 - **Organization** - Contains projects, members, subscription, activities, and invitations
-- **OrganizationMember** - Junction model linking users to organizations with RBAC roles
+- **OrganizationMember** - Junction model linking users to organizations with RBAC roles (`@@unique([userId, organizationId])`)
+- **OrganizationInvitation** - Pending invite by email/role with a unique token and expiry, tracked by `invitations/`
 - **Project** - Belongs to an organization; contains tasks
-- **Task** - Title, description, status (TODO/IN_PROGRESS/REVIEW/DONE), assigned user
+- **Task** - Title, description, status (TODO/IN_PROGRESS/REVIEW/DONE), position (for ordering), assigned user
 - **Subscription** - Organization subscription plan (FREE/PRO) with Stripe integration
-- **Activity** - Audit log for organization actions (user, action, entityType, entityId)
+- **Activity** - Audit log for organization actions (user, action, entityType, entityId, JSON `metadata`)
 
 **Key enums:**
 - `OrganizationRole`: OWNER, ADMIN, MANAGER, MEMBER, VIEWER
@@ -98,7 +102,7 @@ The Prisma schema (`src/prisma/schema.prisma`) defines 7 core models:
 1. **AuthService** - Issues JWT tokens on login; validates credentials with bcrypt
 2. **AuthGuard** - Extracts and validates JWT from headers; attaches user to request
 3. **PermissionGuard** - Checks role-based permissions using decorators on endpoints
-4. **Permissions** - Map of required roles for each operation (defined in `authorization/permissions.ts`)
+4. **Permissions** - `ROLE_PERMISSIONS` maps each `OrganizationRole` to its allowed permission strings (defined in `authorization/permissions.ts`)
 
 Routes are protected with `@UseGuards(AuthGuard)` and `@RequirePermission(action, resource)`.
 

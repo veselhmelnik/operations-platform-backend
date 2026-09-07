@@ -163,6 +163,9 @@ export class TasksService {
       action: ActivityActions.TASK_CREATED,
       entityType: ActivityEntityType.TASK,
       entityId: task.id,
+      metadata: {
+        title: task.title,
+      },
     });
     return task;
   }
@@ -200,6 +203,9 @@ export class TasksService {
         action: ActivityActions.TASK_UPDATED,
         entityType: ActivityEntityType.TASK,
         entityId: taskId,
+        metadata: {
+          title: updatedTask.title,
+        },
       });
     }
 
@@ -308,6 +314,11 @@ export class TasksService {
         action: ActivityActions.TASK_MOVED,
         entityType: ActivityEntityType.TASK,
         entityId: taskId,
+        metadata: {
+          title: task.title,
+          fromStatus: oldStatus,
+          toStatus: newStatus,
+        },
       });
     }
 
@@ -350,6 +361,9 @@ export class TasksService {
         action: ActivityActions.TASK_DELETED,
         entityType: ActivityEntityType.TASK,
         entityId: taskId,
+        metadata: {
+          title: task.title,
+        },
       });
     }
 
