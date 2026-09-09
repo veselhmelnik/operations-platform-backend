@@ -45,7 +45,12 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   const port = process.env.PORT || 3001;
+  const dbUrl = new URL(process.env.DATABASE_URL!);
 
+  console.log('DB HOST:', dbUrl.hostname);
+  console.log('DB PORT:', dbUrl.port);
+  console.log('DB NAME:', dbUrl.pathname);
+  console.log('DB SSL:', dbUrl.search);
   await app.listen(port, '0.0.0.0');
 }
 bootstrap();
