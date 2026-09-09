@@ -28,11 +28,11 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const { accessToken } = await this.authService.login(dto);
-
+    const isProduction = process.env.NODE_ENV === 'production';
     response.cookie('access_token', accessToken, {
       httpOnly: true,
-      sameSite: 'lax',
-      secure: false,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
     });
 
     return {
@@ -42,10 +42,11 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res({ passthrough: true }) response: Response) {
+    const isProduction = process.env.NODE_ENV === 'production';
     response.clearCookie('access_token', {
       httpOnly: true,
-      sameSite: 'lax',
-      secure: false,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
     });
     return { message: 'Logged out successfully' };
   }
