@@ -16,6 +16,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+
   const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
 
   app.enableCors({
