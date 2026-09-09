@@ -96,6 +96,11 @@ export class ProjectsService {
             email: true,
           },
         },
+        labels: {
+          include: {
+            label: true,
+          },
+        },
       },
     });
     const board: Record<TaskStatus, typeof tasks> = {

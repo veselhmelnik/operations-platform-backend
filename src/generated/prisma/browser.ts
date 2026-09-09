@@ -57,3 +57,13 @@ export type Subscription = Prisma.SubscriptionModel
  * 
  */
 export type Activity = Prisma.ActivityModel
+/**
+ * Model TaskLabel
+ * 
+ */
+export type TaskLabel = Prisma.TaskLabelModel
+/**
+ * Model TaskLabelOnTask
+ * 
+ */
+export type TaskLabelOnTask = Prisma.TaskLabelOnTaskModel

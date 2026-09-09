@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -71,6 +75,26 @@ export class TasksService {
         'Assignee is not a member of this organization',
       );
   }
+  private async ensureLabelsBelongToOrganization(
+    organizationId: string,
+    labelIds: string[],
+  ) {
+    if (!labelIds.length) return;
+    const count = await this.prismaService.taskLabel.count({
+      where: {
+        id: {
+          in: labelIds,
+        },
+        organizationId,
+      },
+    });
+
+    if (count !== labelIds.length) {
+      throw new BadRequestException(
+        'One or more labels do not belong to this organization',
+      );
+    }
+  }
 
   async getAllTasks(organizationId: string, projectId: string) {
     await this.getProjectOrThrow(organizationId, projectId);
@@ -95,6 +119,11 @@ export class TasksService {
             email: true,
           },
         },
+        labels: {
+          include: {
+            label: true,
+          },
+        },
       },
     });
   }
@@ -113,6 +142,11 @@ export class TasksService {
             id: true,
             name: true,
             email: true,
+          },
+        },
+        labels: {
+          include: {
+            label: true,
           },
         },
       },
@@ -134,6 +168,11 @@ export class TasksService {
         dto.assigneeId,
       );
     }
+    const labelIds = [...new Set(dto.labelIds ?? [])];
+
+    if (labelIds.length) {
+      await this.ensureLabelsBelongToOrganization(organizationId, labelIds);
+    }
     const lastTask = await this.prismaService.task.findFirst({
       where: {
         projectId,
@@ -154,6 +193,20 @@ export class TasksService {
         assigneeId: dto.assigneeId,
         description: dto.description,
         position,
+        priority: dto.priority,
+
+        labels: {
+          create: labelIds.map((labelId) => ({
+            labelId,
+          })),
+        },
+      },
+      include: {
+        labels: {
+          include: {
+            label: true,
+          },
+        },
       },
     });
 
@@ -184,6 +237,11 @@ export class TasksService {
         dto.assigneeId,
       );
     }
+    const labelIds =
+      dto.labelIds !== undefined ? [...new Set(dto.labelIds)] : undefined;
+    if (labelIds !== undefined) {
+      await this.ensureLabelsBelongToOrganization(organizationId, labelIds);
+    }
     const updatedTask = await this.prismaService.task.update({
       where: {
         id: taskId,
@@ -192,7 +250,23 @@ export class TasksService {
         title: dto.title,
         description: dto.description,
         assigneeId: dto.assigneeId,
-        status: dto.status,
+        priority: dto.priority,
+
+        ...(labelIds !== undefined && {
+          labels: {
+            deleteMany: {},
+            create: labelIds.map((labelId) => ({
+              labelId,
+            })),
+          },
+        }),
+      },
+      include: {
+        labels: {
+          include: {
+            label: true,
+          },
+        },
       },
     });
 

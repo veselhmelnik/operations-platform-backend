@@ -1,11 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  IsArray,
+  IsEnum,
   IsOptional,
   IsString,
   IsUUID,
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { TaskPriority } from 'src/generated/prisma/enums';
 
 export class CreateTaskDto {
   @IsString()
@@ -22,5 +25,21 @@ export class CreateTaskDto {
 
   @IsOptional()
   @IsUUID()
+  @ApiPropertyOptional({
+    type: String,
+    nullable: true,
+  })
   assigneeId?: string;
+
+  @IsOptional()
+  @IsEnum(TaskPriority)
+  @ApiPropertyOptional({
+    enum: TaskPriority,
+  })
+  priority?: TaskPriority;
+
+  @IsOptional()
+  @IsArray()
+  @IsUUID('4', { each: true })
+  labelIds?: string[];
 }

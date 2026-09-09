@@ -404,7 +404,9 @@ export const ModelName = {
   Project: 'Project',
   Task: 'Task',
   Subscription: 'Subscription',
-  Activity: 'Activity'
+  Activity: 'Activity',
+  TaskLabel: 'TaskLabel',
+  TaskLabelOnTask: 'TaskLabelOnTask'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -420,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "organization" | "organizationMember" | "organizationInvitation" | "project" | "task" | "subscription" | "activity"
+    modelProps: "user" | "organization" | "organizationMember" | "organizationInvitation" | "project" | "task" | "subscription" | "activity" | "taskLabel" | "taskLabelOnTask"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1016,6 +1018,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TaskLabel: {
+      payload: Prisma.$TaskLabelPayload<ExtArgs>
+      fields: Prisma.TaskLabelFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TaskLabelFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TaskLabelFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelPayload>
+        }
+        findFirst: {
+          args: Prisma.TaskLabelFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TaskLabelFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelPayload>
+        }
+        findMany: {
+          args: Prisma.TaskLabelFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelPayload>[]
+        }
+        create: {
+          args: Prisma.TaskLabelCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelPayload>
+        }
+        createMany: {
+          args: Prisma.TaskLabelCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TaskLabelCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelPayload>[]
+        }
+        delete: {
+          args: Prisma.TaskLabelDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelPayload>
+        }
+        update: {
+          args: Prisma.TaskLabelUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelPayload>
+        }
+        deleteMany: {
+          args: Prisma.TaskLabelDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TaskLabelUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TaskLabelUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelPayload>[]
+        }
+        upsert: {
+          args: Prisma.TaskLabelUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelPayload>
+        }
+        aggregate: {
+          args: Prisma.TaskLabelAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTaskLabel>
+        }
+        groupBy: {
+          args: Prisma.TaskLabelGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TaskLabelGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TaskLabelCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TaskLabelCountAggregateOutputType> | number
+        }
+      }
+    }
+    TaskLabelOnTask: {
+      payload: Prisma.$TaskLabelOnTaskPayload<ExtArgs>
+      fields: Prisma.TaskLabelOnTaskFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TaskLabelOnTaskFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelOnTaskPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TaskLabelOnTaskFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelOnTaskPayload>
+        }
+        findFirst: {
+          args: Prisma.TaskLabelOnTaskFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelOnTaskPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TaskLabelOnTaskFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelOnTaskPayload>
+        }
+        findMany: {
+          args: Prisma.TaskLabelOnTaskFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelOnTaskPayload>[]
+        }
+        create: {
+          args: Prisma.TaskLabelOnTaskCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelOnTaskPayload>
+        }
+        createMany: {
+          args: Prisma.TaskLabelOnTaskCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TaskLabelOnTaskCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelOnTaskPayload>[]
+        }
+        delete: {
+          args: Prisma.TaskLabelOnTaskDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelOnTaskPayload>
+        }
+        update: {
+          args: Prisma.TaskLabelOnTaskUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelOnTaskPayload>
+        }
+        deleteMany: {
+          args: Prisma.TaskLabelOnTaskDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TaskLabelOnTaskUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TaskLabelOnTaskUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelOnTaskPayload>[]
+        }
+        upsert: {
+          args: Prisma.TaskLabelOnTaskUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskLabelOnTaskPayload>
+        }
+        aggregate: {
+          args: Prisma.TaskLabelOnTaskAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTaskLabelOnTask>
+        }
+        groupBy: {
+          args: Prisma.TaskLabelOnTaskGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TaskLabelOnTaskGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TaskLabelOnTaskCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TaskLabelOnTaskCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1122,6 +1272,7 @@ export const TaskScalarFieldEnum = {
   position: 'position',
   projectId: 'projectId',
   assigneeId: 'assigneeId',
+  priority: 'priority',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1157,6 +1308,24 @@ export const ActivityScalarFieldEnum = {
 } as const
 
 export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typeof ActivityScalarFieldEnum]
+
+
+export const TaskLabelScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  color: 'color',
+  organizationId: 'organizationId'
+} as const
+
+export type TaskLabelScalarFieldEnum = (typeof TaskLabelScalarFieldEnum)[keyof typeof TaskLabelScalarFieldEnum]
+
+
+export const TaskLabelOnTaskScalarFieldEnum = {
+  taskId: 'taskId',
+  labelId: 'labelId'
+} as const
+
+export type TaskLabelOnTaskScalarFieldEnum = (typeof TaskLabelOnTaskScalarFieldEnum)[keyof typeof TaskLabelOnTaskScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1273,6 +1442,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TaskPriority'
+ */
+export type EnumTaskPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskPriority'>
+    
+
+
+/**
+ * Reference to a field of type 'TaskPriority[]'
+ */
+export type ListEnumTaskPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TaskPriority[]'>
     
 
 
@@ -1497,6 +1680,8 @@ export type GlobalOmitConfig = {
   task?: Prisma.TaskOmit
   subscription?: Prisma.SubscriptionOmit
   activity?: Prisma.ActivityOmit
+  taskLabel?: Prisma.TaskLabelOmit
+  taskLabelOnTask?: Prisma.TaskLabelOnTaskOmit
 }
 
 /* Types for Logging */

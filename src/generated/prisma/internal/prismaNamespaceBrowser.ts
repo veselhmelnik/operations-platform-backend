@@ -58,7 +58,9 @@ export const ModelName = {
   Project: 'Project',
   Task: 'Task',
   Subscription: 'Subscription',
-  Activity: 'Activity'
+  Activity: 'Activity',
+  TaskLabel: 'TaskLabel',
+  TaskLabelOnTask: 'TaskLabelOnTask'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -144,6 +146,7 @@ export const TaskScalarFieldEnum = {
   position: 'position',
   projectId: 'projectId',
   assigneeId: 'assigneeId',
+  priority: 'priority',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -179,6 +182,24 @@ export const ActivityScalarFieldEnum = {
 } as const
 
 export type ActivityScalarFieldEnum = (typeof ActivityScalarFieldEnum)[keyof typeof ActivityScalarFieldEnum]
+
+
+export const TaskLabelScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  color: 'color',
+  organizationId: 'organizationId'
+} as const
+
+export type TaskLabelScalarFieldEnum = (typeof TaskLabelScalarFieldEnum)[keyof typeof TaskLabelScalarFieldEnum]
+
+
+export const TaskLabelOnTaskScalarFieldEnum = {
+  taskId: 'taskId',
+  labelId: 'labelId'
+} as const
+
+export type TaskLabelOnTaskScalarFieldEnum = (typeof TaskLabelOnTaskScalarFieldEnum)[keyof typeof TaskLabelOnTaskScalarFieldEnum]
 
 
 export const SortOrder = {

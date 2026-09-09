@@ -45,7 +45,6 @@ export class BillingService {
     if (!organizationId) {
       throw new Error('Missing organizationId');
     }
-
     const subscriptionId =
       typeof session.subscription === 'string'
         ? session.subscription
