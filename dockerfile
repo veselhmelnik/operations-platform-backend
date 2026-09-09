@@ -10,7 +10,6 @@ COPY . .
 RUN npx prisma generate
 RUN npm run build
 
-
 FROM node:22-bookworm-slim AS runner
 
 WORKDIR /app
