@@ -16,8 +16,10 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: frontendUrl,
     credentials: true,
   });
   app.use(cookieParser());
